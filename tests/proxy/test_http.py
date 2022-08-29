@@ -3,6 +3,7 @@ import httpx
 from httpx._types import ProxiesTypes
 
 from pyproxy.settings import settings
+from tests import proxy  # nopycln: import
 
 _proxies: ProxiesTypes = {
     "http://": f"http://{settings.proxy_addr}:{settings.proxy_port}",

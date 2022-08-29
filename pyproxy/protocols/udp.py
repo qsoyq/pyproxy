@@ -3,7 +3,7 @@ import logging
 import time
 
 from collections import defaultdict
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Union
 
 from pyproxy._types import UDP_MAPPING_TABLE_TYPE
 from pyproxy.settings import settings
@@ -19,7 +19,8 @@ class UdpForwardProtocol(asyncio.protocols.DatagramProtocol):
         manager: UDP_MAPPING_TABLE_TYPE,
         last_activity: Dict[Tuple[str,
                                   int],
-                            int | float],
+                            Union[int,
+                                  float]],
         header: bytes,
         dst_transport: asyncio.transports.DatagramTransport,
         dst: Tuple[str,

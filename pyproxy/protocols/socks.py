@@ -55,7 +55,7 @@ class SocksProtocol(asyncio.protocols.Protocol):
         prefix = f'{peername}{isReceiveChar}'
         logger.debug(f'[Output] {prefix} {message}')
 
-    async def accept(self) -> Tuple[asyncio.StreamReader, asyncio.StreamWriter] | None:
+    async def accept(self) -> Optional[Tuple[asyncio.StreamReader, asyncio.StreamWriter]]:
         """根据请求信息, 连接目标服务器, 并返回连接对象"""
         reader, writer = self.client
         data = await reader.read(self.READ_LIMIT)

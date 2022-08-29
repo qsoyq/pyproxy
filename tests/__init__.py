@@ -5,7 +5,7 @@ from typing import Generator
 
 import pytest
 
-from pyproxy.main import start_server
+from pyproxy.console import start_server
 from pyproxy.settings import settings
 
 

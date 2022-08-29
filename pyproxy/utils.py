@@ -7,7 +7,7 @@ import struct
 import urllib.parse
 import urllib.request
 
-from typing import Dict, Tuple
+from typing import Dict, Mapping, Optional, Tuple, Union
 
 import socks
 
@@ -16,7 +16,7 @@ from pyproxy._types import UDP_MAPPING_TABLE_TYPE
 logger = logging.getLogger(__name__)
 
 
-def set_open_file_limit(soft_limit: int | None = None):
+def set_open_file_limit(soft_limit: Optional[int] = None):
     """Configure open file description soft limit on supported OS."""
     if soft_limit is None:
         return
@@ -30,7 +30,7 @@ def set_open_file_limit(soft_limit: int | None = None):
             logger.debug(f'Open file soft limit set to {soft_limit}.')
 
 
-def open_system_proxy(system_proxies: Dict[str, str] | None = None):
+def open_system_proxy(system_proxies: Optional[Mapping[str, str]] = None):
     if system_proxies is None:
         system_proxies = urllib.request.getproxies()
 
@@ -49,9 +49,9 @@ def open_system_proxy(system_proxies: Dict[str, str] | None = None):
 
 def initialize(
     *,
-    soft_limit: int | None = None,
-    system_proxies: dict[str,
-                         str] | None = None,
+    soft_limit: Optional[int] = None,
+    system_proxies: Optional[Mapping[str,
+                                     str]] = None,
     enable_system_proxy: bool = False
 ):
     set_open_file_limit(soft_limit)
@@ -66,7 +66,8 @@ def release_udp_transport(
     manager: UDP_MAPPING_TABLE_TYPE,
     last_activity: Dict[Tuple[str,
                               int],
-                        int | float]
+                        Union[int,
+                              float]]
 ):
     pair = manager.pop(dst, None)
     last_activity.pop(dst, None)
