@@ -3,9 +3,8 @@ name = "pyproxy"
 version = "0.0.1"
 description = ""
 authors = ["wangqs <wqs1639@gmail.com>"]
-readme = "README.md"
 
-repository = "https://github.com/clpy9793/pyproxy"
+repository = "https://github.com/qsoyq/pyproxy"
 
 [tool.poetry.build]
 generate-setup-file = false
@@ -50,7 +49,8 @@ build-backend = "poetry.core.masonry.api"
 [tool.tox]
 legacy_tox_ini = """
 [tox]
-envlist = py310, py39, py38
+envlist = py310, py39, py38, py37
+skip_missing_interpreters = true
 
 [testenv]
 commands = pytest tests
