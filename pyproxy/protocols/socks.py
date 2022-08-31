@@ -152,7 +152,7 @@ class SocksProtocol(asyncio.protocols.Protocol):
         # 读取代理类型
         if cmd == Socks5CMD.CONNECT:
             self._cmd = ProxyCMD.SOCKS_CONNECT
-            target = await asyncio.open_connection(*dst, loop=asyncio.get_event_loop())
+            target = await asyncio.open_connection(*dst)
             self.target = target
 
         elif cmd == Socks5CMD.BIND:
