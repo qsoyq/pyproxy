@@ -42,3 +42,4 @@ tox:
 	docker volume create tox-testenv
 	docker build -t tox-testenv -f ./docker/tox-testenv.Dockerfile .
 	docker run -it --rm -v tox-testenv:/app/.tox tox-testenv
+	if [ -n ${BARK_TOKEN} ]; then curl https://api.day.app/$(BARK_TOKEN)/$(PROJECT_NAME)%20tox%20success; fi;

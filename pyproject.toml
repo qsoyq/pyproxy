@@ -18,7 +18,7 @@ url = "https://mirrors.aliyun.com/pypi/simple/"
 default = true
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.7"
 pysocks = "^1.7.1"
 pydantic = "^1.9.2"
 pretty-errors = "^1.2.25"
@@ -50,10 +50,17 @@ build-backend = "poetry.core.masonry.api"
 legacy_tox_ini = """
 [tox]
 envlist = py310, py39, py38, py37
-skip_missing_interpreters = true
+isolated_build = true
 
 [testenv]
-commands = pytest tests
+setenv =
+    PYTHONPATH = .
+deps =
+    poetry
+    pytest
+
+commands =
+    pytest tests
 """
 
 
