@@ -41,7 +41,7 @@ async def start_udp_server(waiter: asyncio.Future, host: str, port: int):
 
 @_typer.command()
 def run(
-    log_level: int = typer.Option(logging.DEBUG,
+    log_level: int = typer.Option(logging.INFO,
                                   '--log_level',
                                   envvar='log_level'),
     host: str = typer.Option("0.0.0.0",
@@ -57,7 +57,7 @@ def run(
                                    '--soft_limit'),
     log_format: str = typer.Option(r'%(asctime)s %(levelname)s %(filename)s %(lineno)s %(message)s'),
 ):
-    """启动 http 服务"""
+    """https://github.com/qsoyq/pyproxy"""
     logging.basicConfig(level=log_level, format=log_format)
     kwargs = {
         "enable_system_proxy": enable_system_proxy,
