@@ -161,6 +161,7 @@ class SocksProtocol(asyncio.protocols.Protocol):
 
         elif cmd == Socks5CMD.UDP:
             self._cmd = ProxyCMD.SOCKS_UDP
+
         logger.debug(f"cmd: {self._cmd},  target: {self.target},  dst: {self._dst}")
         await self.allow_socks_proxy(writer)
 
@@ -172,6 +173,7 @@ class SocksProtocol(asyncio.protocols.Protocol):
         rep = b'\x00'
         rsv = b'\x00'
         atyp = b'\x01'
+        # TODO: proxy_addr 允许使用域名
         addr = socket.inet_pton(socket.AF_INET, settings.proxy_addr)
         port = struct.pack('>H', settings.proxy_port)
         reply = ver + rep + rsv + atyp + addr + port
