@@ -1,18 +1,19 @@
-import urllib.request
+from contextvars import ContextVar
 
-from pydantic import BaseSettings
+from pydantic import BaseModel
 
 
-class Settings(BaseSettings):
+class Settings(BaseModel):
 
-    system_proxies: dict = urllib.request.getproxies()
     udp_keep_alive_timeout: float = 60
 
-    host: str = "0.0.0.0"
-    port: int = 7999
+    host: str
+    port: int
 
-    proxy_addr: str = '127.0.0.1'
-    proxy_port: int = 7999
+    proxy_addr: str
+    proxy_port: int
 
 
-settings = Settings()
+_settings: ContextVar[Settings] = ContextVar('settings')
+
+__all__ = ['_settings']

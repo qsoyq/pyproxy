@@ -6,7 +6,7 @@ from collections import defaultdict
 from typing import Dict, Tuple, Union
 
 from pyproxy._types import UDP_MAPPING_TABLE_TYPE
-from pyproxy.settings import settings
+from pyproxy.settings import _settings
 from pyproxy.utils import Socks5ProxyParser, release_udp_transport
 
 logger = logging.getLogger(__name__)
@@ -71,6 +71,7 @@ class UdpProtocol(asyncio.DatagramProtocol):
 
     async def keepalive_loop(self):
         # 释放超时连接
+        settings = _settings.get()
         while True:
             await asyncio.sleep(self.KEEPALIVE_LOOP_WAIT)
             cur = time.time()

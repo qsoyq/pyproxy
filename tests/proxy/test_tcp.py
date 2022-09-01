@@ -2,11 +2,11 @@ import ssl
 
 import socks
 
-from pyproxy.settings import settings
-from tests import proxy  # nopycln: import
+from tests import base_settings, proxy, proxy_default_settings  # nopycln: import
 
 
 def test_tcp(proxy):
+    settings = proxy_default_settings
     s = socks.socksocket()
     s.set_proxy(socks.SOCKS5, f"{settings.proxy_addr}", settings.proxy_port)
     s.settimeout(10)
@@ -24,6 +24,7 @@ def test_tcp(proxy):
 
 
 def test_tcp_over_tls():
+    settings = proxy_default_settings
     s = socks.socksocket()
     s.set_proxy(socks.SOCKS5, f"{settings.proxy_addr}", settings.proxy_port)
     s.settimeout(10)

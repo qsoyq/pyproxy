@@ -7,11 +7,13 @@ import struct
 import urllib.parse
 import urllib.request
 
+from contextvars import Token
 from typing import Dict, Mapping, Optional, Tuple, Union
 
 import socks
 
 from pyproxy._types import UDP_MAPPING_TABLE_TYPE
+from pyproxy.settings import Settings, _settings
 
 logger = logging.getLogger(__name__)
 
@@ -49,15 +51,33 @@ def open_system_proxy(system_proxies: Optional[Mapping[str, str]] = None):
 
 def initialize(
     *,
+    host: str,
+    port: int,
+    proxy_addr: Optional[str] = None,
+    proxy_port: Optional[int] = None,
     soft_limit: Optional[int] = None,
     system_proxies: Optional[Mapping[str,
                                      str]] = None,
-    enable_system_proxy: bool = False
-):
+    enable_system_proxy: bool = False,
+    settings: Optional[Settings] = None,
+) -> Token:
+
+    if settings is None:
+        assert proxy_addr and proxy_port
+        settings = Settings(host=host, port=port, proxy_addr=proxy_addr, proxy_port=proxy_port)
+    token = _settings.set(settings)
+
+    try:
+        _ = socket.inet_pton(socket.AF_INET, settings.proxy_addr)
+    except socket.error:
+        settings.proxy_addr = socket.gethostbyname(settings.proxy_addr)
+
     set_open_file_limit(soft_limit)
 
     if enable_system_proxy:
         open_system_proxy(system_proxies)
+
+    return token
 
 
 def release_udp_transport(

@@ -7,10 +7,11 @@ import urllib.parse
 
 from typing import Optional, Tuple, Union
 
+from pyproxy import settings
 from pyproxy.const import HTTP_PROXY_CONNECT_RESPONSE, ProxyCMD, Socks5CMD
 from pyproxy.errors import ConnectError
 from pyproxy.protocols.udp import UdpProtocol
-from pyproxy.settings import settings
+from pyproxy.settings import _settings
 from pyproxy.utils import Socks5ProxyParser, release_udp_transport
 
 logger = logging.getLogger(__name__)
@@ -168,6 +169,7 @@ class SocksProtocol(asyncio.protocols.Protocol):
     async def allow_socks_proxy(self, writer: asyncio.StreamWriter):
         """允许客户端连接后, 根据代理设置封装回复
         """
+        settings = _settings.get()
         # TODO: ipv6、host
         ver = b'\x05'
         rep = b'\x00'
