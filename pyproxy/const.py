@@ -25,5 +25,3 @@ class ProxyCMD(IntEnum):
 HTTP_PROXY_CONNECT_RESPONSE = (b'HTTP/1.0 200 Connection Established\r\n'
                                b'Connection: close\r\n'
                                b'\r\n')
-
-VERSION = "0.0.2"

@@ -6,7 +6,7 @@ from typing import Optional
 
 import typer
 
-import pyproxy.const
+import pyproxy
 
 from pyproxy.protocols.socks import SocksProtocol
 from pyproxy.protocols.udp import UdpProtocol
@@ -51,7 +51,7 @@ async def start_udp_server(waiter: asyncio.Future, host: str, port: int):
 
 def version_callback(value: bool):
     if value:
-        print(f"PyProxy CLI Version: {pyproxy.const.VERSION}")
+        print(f"PyProxy CLI Version: {pyproxy.__version__}")
         raise typer.Exit()
 
 
