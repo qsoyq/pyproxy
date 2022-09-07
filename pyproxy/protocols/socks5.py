@@ -5,7 +5,7 @@ import struct
 import traceback
 import urllib.parse
 
-from typing import Optional, Tuple, Union
+from typing import List, Optional, Tuple, Union
 
 from pyproxy import settings
 from pyproxy.const import HTTP_PROXY_CONNECT_RESPONSE, ProxyCMD, Socks5CMD
@@ -54,9 +54,9 @@ class SocksProtocol(asyncio.protocols.Protocol):
         isReceiveChar = '<' if isReceive else '>'
         peername = writer.transport.get_extra_info('peername')
         prefix = f'{peername}{isReceiveChar}'
-        logger.debug(f'[Output] {prefix} {message}')
+        logger.debug(f'[Output] {prefix!r} {message!r}')
 
-    async def accept(self) -> Optional[Tuple[asyncio.StreamReader, asyncio.StreamWriter]]:
+    async def accept(self):
         """根据请求信息, 连接目标服务器, 并返回连接对象"""
         reader, writer = self.client
         data = await reader.read(self.READ_LIMIT)
@@ -75,6 +75,7 @@ class SocksProtocol(asyncio.protocols.Protocol):
 
         await self.socks_proxy()
 
+
     async def http_proxy(self, data: bytes):
         self._cmd = ProxyCMD.HTTP
 
@@ -82,9 +83,9 @@ class SocksProtocol(asyncio.protocols.Protocol):
         # HTTPS 代理
         if data.startswith(b'CONNECT'):
             self._cmd = ProxyCMD.HTTPS
-            items = data.split(b' ')
+            lines = data.split(b' ')
             # TODO ipv6 support
-            host, port = items[1].split(b':')
+            host, port = lines[1].split(b':')
             raddr = (host.decode(), int(port))
 
             target = await asyncio.open_connection(*raddr)
@@ -95,7 +96,7 @@ class SocksProtocol(asyncio.protocols.Protocol):
             logger.debug('open connection success')
 
             resp = HTTP_PROXY_CONNECT_RESPONSE
-            logger.debug(f'write connect response: \n{resp}')
+            logger.debug(f'write connect response: \n{resp!r}')
             writer.write(resp)
             await writer.drain()
             await self.output(resp, writer, False)
@@ -106,12 +107,12 @@ class SocksProtocol(asyncio.protocols.Protocol):
             self._cmd = ProxyCMD.HTTP
             headers = {}
             items, body = data.split(b'\r\n\r\n')
-            items = items.split(b'\r\n')
-            method, addr, version = items[0].split(b' ')
-            for item in items[1:]:
-                if not item:
+            headerlines = items.split(b'\r\n')
+            method, addr, version = headerlines[0].split(b' ')
+            for headerline in headerlines[1:]:
+                if not headerline or b':' not in headerline:
                     continue
-                k, v = item.split(b': ', 1)
+                k, v = headerline.split(b': ', 1)
                 headers[k] = v
 
             u = urllib.parse.urlparse(addr)
@@ -123,7 +124,7 @@ class SocksProtocol(asyncio.protocols.Protocol):
             else:
                 raddr = (_addr[0].decode(), int(_addr[1]))
 
-            logger.debug(f'{method}, {addr}, {version}, {headers}, {raddr}, {body}')
+            logger.debug(f'{method!r}, {addr!r}, {version!r}, {headers!r}, {raddr!r}, {body!r}')
 
             target = await asyncio.open_connection(*raddr)
             target[1].write(data)

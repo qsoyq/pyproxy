@@ -36,7 +36,7 @@ class UdpForwardProtocol(asyncio.protocols.DatagramProtocol):
     def __repr__(self):
         return f'<UdpForwardProtocol dst={self._dst}>'
 
-    def connection_made(self, transport: asyncio.transports.DatagramTransport):
+    def connection_made(self, transport: asyncio.transports.DatagramTransport): # type: ignore[override]
         self.transport = transport
 
     def datagram_received(self, data: bytes, addr: Tuple[str, int]):
@@ -82,7 +82,7 @@ class UdpProtocol(asyncio.DatagramProtocol):
                     continue
                 release_udp_transport(dst, self.MANAGER, self.LAST_ACTIVITY)
 
-    def connection_made(self, transport: asyncio.transports.DatagramTransport):
+    def connection_made(self, transport: asyncio.transports.DatagramTransport): # type: ignore[override]
         self.transport = transport
 
     def datagram_received(self, data, addr):
@@ -93,7 +93,7 @@ class UdpProtocol(asyncio.DatagramProtocol):
     async def handle_datagram_received(self, data: bytes, addr: Tuple[str, int]):
         logger.info(f"manager: {len(self._manager)} {self._manager!r}")
         dst, header, message = Socks5ProxyParser.unpack(data)
-        logger.info(f"addr: {addr}, dst: {dst}, header: {header}, message: {message}")
+        logger.info(f"addr: {addr!r}, dst: {dst!r}, header: {header!r}, message: {message!r}")
 
         if dst is None or message is None:
             self.transport.close()

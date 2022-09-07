@@ -46,7 +46,7 @@ def open_system_proxy(system_proxies: Optional[Mapping[str, str]] = None):
         else:
             host, port = addr[0], int(addr[1])
         socks.set_default_proxy(socks.SOCKS5, host, port)
-        socket.socket = socks.socksocket
+        socket.socket = socks.socksocket  # type: ignore
 
 
 def initialize(
