@@ -36,7 +36,7 @@ class UdpForwardProtocol(asyncio.protocols.DatagramProtocol):
     def __repr__(self):
         return f'<UdpForwardProtocol dst={self._dst}>'
 
-    def connection_made(self, transport: asyncio.transports.DatagramTransport): # type: ignore[override]
+    def connection_made(self, transport: asyncio.transports.DatagramTransport):  # type: ignore[override]
         self.transport = transport
 
     def datagram_received(self, data: bytes, addr: Tuple[str, int]):
@@ -82,7 +82,7 @@ class UdpProtocol(asyncio.DatagramProtocol):
                     continue
                 release_udp_transport(dst, self.MANAGER, self.LAST_ACTIVITY)
 
-    def connection_made(self, transport: asyncio.transports.DatagramTransport): # type: ignore[override]
+    def connection_made(self, transport: asyncio.transports.DatagramTransport):  # type: ignore[override]
         self.transport = transport
 
     def datagram_received(self, data, addr):

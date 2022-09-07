@@ -5,7 +5,7 @@ import struct
 import traceback
 import urllib.parse
 
-from typing import List, Optional, Tuple, Union
+from typing import Optional, Tuple, Union
 
 from pyproxy import settings
 from pyproxy.const import HTTP_PROXY_CONNECT_RESPONSE, ProxyCMD, Socks5CMD
@@ -74,7 +74,6 @@ class SocksProtocol(asyncio.protocols.Protocol):
             raise ConnectError('只接受匿名代理')
 
         await self.socks_proxy()
-
 
     async def http_proxy(self, data: bytes):
         self._cmd = ProxyCMD.HTTP
