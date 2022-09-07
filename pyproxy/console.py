@@ -8,7 +8,7 @@ import typer
 
 import pyproxy
 
-from pyproxy.protocols.socks import SocksProtocol
+from pyproxy.protocols.socks5 import SocksProtocol
 from pyproxy.protocols.udp import UdpProtocol
 from pyproxy.settings import _settings
 from pyproxy.utils import initialize
